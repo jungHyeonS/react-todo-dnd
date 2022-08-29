@@ -4,6 +4,7 @@ import { createGlobalStyle} from 'styled-components';
 import styled from 'styled-components';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { toDoState } from './atom';
+import DragabbleCard from './Components/DragabbleCard';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
@@ -89,12 +90,7 @@ const Board = styled.div`
   border-radius : 10px;
   min-height: 200px;
 `
-const Card = styled.div`
-  border-radius: 5px;
-  padding: 10px 10px;
-  background-color: ${(props) => props.theme.cardColor};
-  margin-top: 10px;
-`
+
 
 
 const toDos = ["a","b","c","d","e","f"];
@@ -123,12 +119,7 @@ function App() {
                 (magic) => 
                 <Board ref={magic.innerRef} {...magic.droppableProps}> 
                   {toDos.map((toDo,index) => (
-                  <Draggable key={toDo} draggableId={toDo} index={index}>
-                    {(magic) => 
-                    <Card ref={magic.innerRef}{...magic.dragHandleProps}  {...magic.draggableProps}>
-                      {toDo}
-                    </Card>}
-                  </Draggable>
+                    <DragabbleCard key={toDo} index={index} toDo={toDo}/>
                   ))}
                   {magic.placeholder}
                   
