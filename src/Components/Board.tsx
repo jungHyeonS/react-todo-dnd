@@ -27,13 +27,13 @@ function Board({toDos,boardId} : IBoardProps){
             <Droppable droppableId={boardId}>
                 {
                 (magic) => 
-                <Wrapper ref={magic.innerRef} {...magic.droppableProps}> 
+                <div ref={magic.innerRef} {...magic.droppableProps}> 
                     {toDos.map((toDo,index) => (
                     <DragabbleCard key={toDo} index={index} toDo={toDo}/>
                     ))}
                     {magic.placeholder}
                     
-                </Wrapper>
+                </div>
                 }
             </Droppable>
         </Wrapper>
