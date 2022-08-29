@@ -94,14 +94,23 @@ function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
 
   //드래그가 끝났을때
-  const onDragEnd = ({draggableId,destination,source} : DropResult) => {
-    if(!destination) return
-    // setToDos(oldToDos => {
-    //   const copyToDos = [...oldToDos];
-    //   copyToDos.splice(source.index,1);
-    //   copyToDos.splice(destination?.index,0,draggableId)
-    //   return copyToDos
-    // })
+  const onDragEnd = (info : DropResult) => {
+    const {destination,draggableId,source} = info;
+    if(destination?.droppableId === source.droppableId){
+      // same board move
+      setToDos((oldToDos) => {
+        const boardCopy = [...oldToDos[source.droppableId]]
+        boardCopy.splice(source.index,1)
+        boardCopy.splice(destination.index,0,draggableId)
+
+        //다른 오브젝트들 다 복사하고  source.droppableId 와 일치하는 객체만 대체한다
+        return {
+          ...oldToDos,
+          [source.droppableId] : boardCopy
+        }
+      })
+    }
+    
   };
   return (
     <>
