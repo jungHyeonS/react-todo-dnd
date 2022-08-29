@@ -1,7 +1,9 @@
 import React from 'react';
-import {DragDropContext, Draggable, Droppable} from "react-beautiful-dnd"
+import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd"
 import { createGlobalStyle} from 'styled-components';
 import styled from 'styled-components';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { toDoState } from './atom';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
@@ -98,7 +100,18 @@ const Card = styled.div`
 const toDos = ["a","b","c","d","e","f"];
 
 function App() {
-  const onDragEnd = () => {};
+  const [toDos, setToDos] = useRecoilState(toDoState)
+
+  //드래그가 끝났을때
+  const onDragEnd = ({draggableId,destination,source} : DropResult) => {
+    if(!destination) return
+    setToDos(oldToDos => {
+      const copyToDos = [...oldToDos];
+      copyToDos.splice(source.index,1);
+      copyToDos.splice(destination?.index,0,draggableId)
+      return copyToDos
+    })
+  };
   return (
     <>
       <GlobalStyle/>
@@ -110,7 +123,7 @@ function App() {
                 (magic) => 
                 <Board ref={magic.innerRef} {...magic.droppableProps}> 
                   {toDos.map((toDo,index) => (
-                  <Draggable draggableId={toDo} index={index}>
+                  <Draggable key={toDo} draggableId={toDo} index={index}>
                     {(magic) => 
                     <Card ref={magic.innerRef}{...magic.dragHandleProps}  {...magic.draggableProps}>
                       {toDo}
