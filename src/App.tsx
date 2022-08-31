@@ -101,8 +101,9 @@ function App() {
       // same board move
       setToDos((oldToDos) => {
         const boardCopy = [...oldToDos[source.droppableId]]
+        const taskObj = boardCopy[source.index]
         boardCopy.splice(source.index,1)
-        boardCopy.splice(destination.index,0,draggableId)
+        boardCopy.splice(destination.index,0,taskObj)
 
         //다른 오브젝트들 다 복사하고  source.droppableId 와 일치하는 객체만 대체한다
         return {
@@ -114,9 +115,10 @@ function App() {
     if(destination.droppableId !== source.droppableId){
       setToDos((allBoard) => {
         const sourceBoard = [...allBoard[source.droppableId]];
+        const taskObj = sourceBoard[source.index]
         const targetBoard = [...allBoard[destination.droppableId]];
         sourceBoard.splice(source.index,1);
-        targetBoard.splice(destination.index,0,draggableId);
+        targetBoard.splice(destination.index,0,taskObj);
         return {
           ...allBoard,
           [source.droppableId] : sourceBoard,
