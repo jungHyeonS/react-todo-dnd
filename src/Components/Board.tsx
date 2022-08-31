@@ -3,8 +3,8 @@ import styled from "styled-components"
 import DragabbleCard from "./DragabbleCard"
 
 const Wrapper = styled.div`
-  padding: 20px 10px;
-  padding-top: 30px;
+  padding: 10px 0px;
+  padding-top: 10px;
   background-color: ${(props) => props.theme.boardColor};
   border-radius : 10px;
   min-height: 200px;
@@ -18,9 +18,10 @@ const Title = styled.h1`
 `
 
 const Area = styled.div<IAreaProps>`
-    background-color: ${(props) => props.isDraggingOver ? "pink" : props.isDraggingFromThis ? "red" : "blue"};
+    background-color: ${(props) => props.isDraggingOver ? "#dfe6e9" : props.isDraggingFromThis ? "#b2bec3" : "transparent"};
     flex-grow: 1;
     transition: background-color .5s;
+    padding: 20px;
 `
 
 interface IBoardProps {
