@@ -1,5 +1,5 @@
 import {atom,selector} from "recoil"
-
+import { localStorageEffect } from "./localStroage";
 export interface ITodo{
     id  : number,
     text : string;
@@ -17,5 +17,6 @@ export const toDoState = atom<IToDoState>({
         "To Do" : [],
         Doing : [],
         Done : []
-    }
+    },
+    effects:[localStorageEffect("toDo")]
 })
