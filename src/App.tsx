@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {DragDropContext, Draggable, Droppable, DropResult} from "react-beautiful-dnd"
 import { createGlobalStyle} from 'styled-components';
 import styled from 'styled-components';
@@ -6,6 +6,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { toDoState } from './atom';
 import DragabbleCard from './Components/DragabbleCard';
 import Board from './Components/Board';
+import Trash from './Components/trash';
 
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
@@ -92,12 +93,27 @@ const toDos = ["a","b","c","d","e","f"];
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
-
+  const [isTrash,setIsTrash] = useState(false);
   //드래그가 끝났을때
   const onDragEnd = (info : DropResult) => {
+    console.log(info);
     const {destination,draggableId,source} = info;
+
+    
+
     if(!destination) return;
-    if(destination?.droppableId === source.droppableId){
+
+    if(destination?.droppableId == "trash"){
+      setToDos((oldToDos)=>{
+        const todoCopy = [...oldToDos[source.droppableId]];
+        todoCopy.splice(source.index,1);
+        return {
+          ...oldToDos,
+          [source.droppableId] : todoCopy
+        }
+      })
+    }
+    else if(destination?.droppableId === source.droppableId){
       // same board move
       setToDos((oldToDos) => {
         const boardCopy = [...oldToDos[source.droppableId]]
@@ -126,17 +142,29 @@ function App() {
         }
       })
     }
+
+    setIsTrash(false);
     
   };
+
+  const onDragStart = () => {
+    console.log("onDragStart");
+    setIsTrash(true)
+    
+  }
+  console.log(isTrash)
   return (
     <>
       <GlobalStyle/>
-         <DragDropContext onDragEnd={onDragEnd}>
+         <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
             <Boards>
               {Object.keys(toDos).map(boardId => <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>)}
             </Boards>
           </Wrapper>
+          <Trash/>
+          {/* {isTrash} */}
+          {/* {isTrash ? <Trash/> : null} */}
         </DragDropContext>
     </>
   );
