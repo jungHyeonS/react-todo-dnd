@@ -7,7 +7,7 @@ import { toDoState } from './atom';
 import DragabbleCard from './Components/DragabbleCard';
 import Board from './Components/Board';
 import Trash from './Components/trash';
-
+import AddBoard from './Components/addBoard';
 const GlobalStyle = createGlobalStyle`
   @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -103,6 +103,7 @@ function App() {
 
     if(!destination) return;
 
+    //todo 삭제
     if(destination?.droppableId == "trash"){
       setToDos((oldToDos)=>{
         const todoCopy = [...oldToDos[source.droppableId]];
@@ -156,6 +157,7 @@ function App() {
   return (
     <>
       <GlobalStyle/>
+        <AddBoard/>
          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
             <Boards>
