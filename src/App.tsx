@@ -89,7 +89,7 @@ const Boards = styled.div`
 
 
 
-const toDos = ["a","b","c","d","e","f"];
+// const toDos = ["a","b","c","d","e","f"];
 
 function App() {
   const [toDos, setToDos] = useRecoilState(toDoState)
@@ -97,54 +97,54 @@ function App() {
   //드래그가 끝났을때
   const onDragEnd = (info : DropResult) => {
     console.log(info);
-    const {destination,draggableId,source} = info;
+    // const {destination,draggableId,source} = info;
 
     
 
-    if(!destination) return;
+    // if(!destination) return;
 
-    //todo 삭제
-    if(destination?.droppableId == "trash"){
-      setToDos((oldToDos)=>{
-        const todoCopy = [...oldToDos[source.droppableId]];
-        todoCopy.splice(source.index,1);
-        return {
-          ...oldToDos,
-          [source.droppableId] : todoCopy
-        }
-      })
-    }
-    else if(destination?.droppableId === source.droppableId){
-      // same board move
-      setToDos((oldToDos) => {
-        const boardCopy = [...oldToDos[source.droppableId]]
-        const taskObj = boardCopy[source.index]
-        boardCopy.splice(source.index,1)
-        boardCopy.splice(destination.index,0,taskObj)
+    // //todo 삭제
+    // if(destination?.droppableId == "trash"){
+    //   setToDos((oldToDos)=>{
+    //     const todoCopy = [...oldToDos[source.droppableId]];
+    //     todoCopy.splice(source.index,1);
+    //     return {
+    //       ...oldToDos,
+    //       [source.droppableId] : todoCopy
+    //     }
+    //   })
+    // }
+    // else if(destination?.droppableId === source.droppableId){
+    //   // same board move
+    //   setToDos((oldToDos) => {
+    //     const boardCopy = [...oldToDos[source.droppableId]]
+    //     const taskObj = boardCopy[source.index]
+    //     boardCopy.splice(source.index,1)
+    //     boardCopy.splice(destination.index,0,taskObj)
 
-        //다른 오브젝트들 다 복사하고  source.droppableId 와 일치하는 객체만 대체한다
-        return {
-          ...oldToDos,
-          [source.droppableId] : boardCopy
-        }
-      })
-    }
-    if(destination.droppableId !== source.droppableId){
-      setToDos((allBoard) => {
-        const sourceBoard = [...allBoard[source.droppableId]];
-        const taskObj = sourceBoard[source.index]
-        const targetBoard = [...allBoard[destination.droppableId]];
-        sourceBoard.splice(source.index,1);
-        targetBoard.splice(destination.index,0,taskObj);
-        return {
-          ...allBoard,
-          [source.droppableId] : sourceBoard,
-          [destination.droppableId] : targetBoard
-        }
-      })
-    }
+    //     //다른 오브젝트들 다 복사하고  source.droppableId 와 일치하는 객체만 대체한다
+    //     return {
+    //       ...oldToDos,
+    //       [source.droppableId] : boardCopy
+    //     }
+    //   })
+    // }
+    // if(destination.droppableId !== source.droppableId){
+    //   setToDos((allBoard) => {
+    //     const sourceBoard = [...allBoard[source.droppableId]];
+    //     const taskObj = sourceBoard[source.index]
+    //     const targetBoard = [...allBoard[destination.droppableId]];
+    //     sourceBoard.splice(source.index,1);
+    //     targetBoard.splice(destination.index,0,taskObj);
+    //     return {
+    //       ...allBoard,
+    //       [source.droppableId] : sourceBoard,
+    //       [destination.droppableId] : targetBoard
+    //     }
+    //   })
+    // }
 
-    setIsTrash(false);
+    // setIsTrash(false);
     
   };
 
@@ -153,7 +153,6 @@ function App() {
     setIsTrash(true)
     
   }
-  console.log(isTrash)
   return (
     <>
       <GlobalStyle/>
@@ -161,7 +160,17 @@ function App() {
          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
             <Boards>
-              {Object.keys(toDos).map(boardId => <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>)}
+              {
+                toDos.map((board)=>(
+                  // board.boardId
+                  <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
+                ))
+              }
+              
+              {/* {Object.keys(toDos).map(boardId => (
+              
+              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>
+              ))} */}
             </Boards>
           </Wrapper>
           <Trash/>

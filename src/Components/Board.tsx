@@ -56,10 +56,14 @@ function Board({toDos,boardId} : IBoardProps){
             text : toDo
         };
         setToDos((allBoards) => {
-            return {
-                ...allBoards,
-                [boardId] : [...allBoards[boardId],newTodo]
-            }
+            // console.log(allBoards);
+            const boardCopy = allBoards;
+
+            const boardIndex = boardCopy.findIndex((item) => item.boardId === boardId);
+            // console.log(boardIndex);
+            // boardCopy[boardIndex].value.push(newTodo);
+            console.log(boardCopy[boardIndex].value)
+            return allBoards
         })
         setValue("toDo","")
     }

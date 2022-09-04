@@ -6,17 +6,24 @@ export interface ITodo{
 }
 
 
-interface IToDoState {
-    [key : string]: ITodo[];
+interface IToDoItem{
+    boardId:string;
+    value : ITodo[]
 }
+
+interface IToDoState extends Array<IToDoItem>{
+   
+} 
+
 
 
 export const toDoState = atom<IToDoState>({
     key:"toDo",
-    default:{
-        "To Do" : [],
-        Doing : [],
-        Done : []
-    },
+    default:[
+        {
+            boardId:"To Do",
+            value:[]
+        }
+    ],
     effects:[localStorageEffect("toDo")]
 })

@@ -18,10 +18,14 @@ function AddBoard(){
     const {register,setValue,handleSubmit} = useForm<IBoardForm>()
     const onValid = ({boardId}:IBoardForm) => {
         setToDos((allBoard)=>{
-            return {
-                ...allBoard,
-                [boardId] : []
+            const newBoard = {
+                boardId : boardId,
+                value :[]
             }
+            return [
+                ...allBoard,
+                newBoard
+            ];
         })
         setValue("boardId","");
     }
