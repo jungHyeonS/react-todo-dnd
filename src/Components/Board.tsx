@@ -2,7 +2,7 @@ import { Droppable } from "react-beautiful-dnd"
 import styled from "styled-components"
 import DragabbleCard from "./DragabbleCard"
 import { useForm } from "react-hook-form"
-import { ITodo, toDoState } from "../atom"
+import { ITodo, IToDoItem, toDoState } from "../atom"
 import { useSetRecoilState } from "recoil"
 const Wrapper = styled.div`
   padding: 10px 0px;
@@ -56,14 +56,16 @@ function Board({toDos,boardId} : IBoardProps){
             text : toDo
         };
         setToDos((allBoards) => {
-            // console.log(allBoards);
-            const boardCopy = allBoards;
-
-            const boardIndex = boardCopy.findIndex((item) => item.boardId === boardId);
-            // console.log(boardIndex);
-            // boardCopy[boardIndex].value.push(newTodo);
-            console.log(boardCopy[boardIndex].value)
-            return allBoards
+            let boardCopy = [...allBoards];
+            let boardIndex = boardCopy.findIndex((item) => item.boardId === boardId);
+            let newArray = [...boardCopy[boardIndex].value,newTodo];
+            let newObjact = {
+                boardId : boardId,
+                value : newArray
+            }
+            boardCopy.splice(boardIndex,1);
+            boardCopy.splice(boardIndex,0,newObjact);
+            return boardCopy
         })
         setValue("toDo","")
     }

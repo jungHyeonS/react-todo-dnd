@@ -6,7 +6,7 @@ export interface ITodo{
 }
 
 
-interface IToDoItem{
+export interface IToDoItem{
     boardId:string;
     value : ITodo[]
 }

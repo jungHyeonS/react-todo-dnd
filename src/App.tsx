@@ -97,10 +97,35 @@ function App() {
   //드래그가 끝났을때
   const onDragEnd = (info : DropResult) => {
     console.log(info);
-    // const {destination,draggableId,source} = info;
+    const {destination,draggableId,source} = info;
 
-    
+    if(destination?.droppableId === "droppable"){
+      setToDos((oldToDos)=>{
+        const todoCopy = [...oldToDos];
+        const taskTodo = oldToDos[source.index];
+        todoCopy.splice(source.index,1);
+        todoCopy.splice(destination.index,0,taskTodo);
 
+        return todoCopy
+      })
+    }
+
+    if(destination?.droppableId === source.droppableId){
+      setToDos((oldToDos)=>{
+        const boardCopy = [...oldToDos]
+        console.log(boardCopy);
+        // const todoCopy = [...boardCopy[0].value];
+        // console.log(todoCopy);
+        // const taskObj = todoCopy[source.index];
+        // todoCopy.splice(source.index,1);
+        // todoCopy.splice(destination.index,0,taskObj);
+        // console.log(todoCopy);
+
+        
+
+        return oldToDos;
+      })
+    }
     // if(!destination) return;
 
     // //todo 삭제
@@ -160,12 +185,57 @@ function App() {
          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
             <Boards>
-              {
+
+            <Droppable droppableId="droppable" type="PERSON">
+              {(provided, snapshot) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  {/* <Draggable draggableId='draggable-1' index={0}>
+                      
+                  </Draggable> */}
+                  {
+                    toDos.map((board,index)=>(
+                      <Draggable draggableId={`draggale-${index}`} index={index}>
+                        {
+                          (provided,snapshot) => (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                              <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
+                            </div>
+                          )
+                        }
+                      </Draggable>
+
+                      
+                    ))
+                  }
+                </div>
+
+  //               <div
+  //                 ref={provided.innerRef}
+  //                 style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
+  //                 {...provided.droppableProps}
+  //               >
+  //                 <Draggable draggableId="draggable-1" index={0}>
+  // {(provided, snapshot) => (
+  //   <div
+  //     ref={provided.innerRef}
+  //     {...provided.draggableProps}
+  //     {...provided.dragHandleProps}
+  //   >
+  //     <h4>My draggable</h4>
+  //   </div>
+  // )}
+  //                 </Draggable>;
+  //               </div>
+              )}
+            </Droppable>
+
+
+              {/* {
                 toDos.map((board)=>(
                   // board.boardId
                   <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
                 ))
-              }
+              } */}
               
               {/* {Object.keys(toDos).map(boardId => (
               
