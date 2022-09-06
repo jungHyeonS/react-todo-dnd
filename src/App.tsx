@@ -70,7 +70,6 @@ a{
 `
 
 const Wrapper = styled.div`
-  display: flex;
   max-width: 680px;
   width: 100%;
   margin: 0 auto;
@@ -80,10 +79,18 @@ const Wrapper = styled.div`
 `
 
 const Boards = styled.div`
-  display: grid;
+  width: 100%;
+  display: flex;
+  flex-wrap: nowrap;
+  /* display: grid;
   width: 100%;
   gap: 10px;
-  grid-template-columns: repeat(3,1fr);
+  grid-template-columns: repeat(3,1fr); */
+`
+const SubBoard = styled.div`
+  width: 10%;
+  /* display: grid;
+  grid-template-columns: repeat(3,1fr); */
 `
 
 
@@ -168,54 +175,7 @@ function App() {
         boardCopy.splice(targetIndex,0,targetObject)
         return boardCopy
       })
-      // console.log("info");
-      // console.log(info);
     }
-    // if(!destination) return;
-
-    // //todo 삭제
-    // if(destination?.droppableId == "trash"){
-    //   setToDos((oldToDos)=>{
-    //     const todoCopy = [...oldToDos[source.droppableId]];
-    //     todoCopy.splice(source.index,1);
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId] : todoCopy
-    //     }
-    //   })
-    // }
-    // else if(destination?.droppableId === source.droppableId){
-    //   // same board move
-    //   setToDos((oldToDos) => {
-    //     const boardCopy = [...oldToDos[source.droppableId]]
-    //     const taskObj = boardCopy[source.index]
-    //     boardCopy.splice(source.index,1)
-    //     boardCopy.splice(destination.index,0,taskObj)
-
-    //     //다른 오브젝트들 다 복사하고  source.droppableId 와 일치하는 객체만 대체한다
-    //     return {
-    //       ...oldToDos,
-    //       [source.droppableId] : boardCopy
-    //     }
-    //   })
-    // }
-    // if(destination.droppableId !== source.droppableId){
-    //   setToDos((allBoard) => {
-    //     const sourceBoard = [...allBoard[source.droppableId]];
-    //     const taskObj = sourceBoard[source.index]
-    //     const targetBoard = [...allBoard[destination.droppableId]];
-    //     sourceBoard.splice(source.index,1);
-    //     targetBoard.splice(destination.index,0,taskObj);
-    //     return {
-    //       ...allBoard,
-    //       [source.droppableId] : sourceBoard,
-    //       [destination.droppableId] : targetBoard
-    //     }
-    //   })
-    // }
-
-    // setIsTrash(false);
-    
   };
 
   const onDragStart = () => {
@@ -229,7 +189,6 @@ function App() {
         <AddBoard/>
          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
-            <Boards>
 
             <Droppable droppableId="droppable" type="PERSON">
               {(provided, snapshot) => (
@@ -239,7 +198,7 @@ function App() {
                   </Draggable> */}
                   {
                     toDos.map((board,index)=>(
-                      <Draggable draggableId={`draggale-${index}`} index={index}>
+                      <Draggable draggableId={`draggale-${index}`} index={index} key={index}>
                         {
                           (provided,snapshot) => (
                             <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
@@ -248,14 +207,11 @@ function App() {
                           )
                         }
                       </Draggable>
-
-                      
                     ))
                   }
                 </div>
               )}
             </Droppable>
-            </Boards>
           </Wrapper>
           <Trash/>
           {/* {isTrash} */}
