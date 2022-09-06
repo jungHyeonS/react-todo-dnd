@@ -70,8 +70,8 @@ a{
 `
 
 const Wrapper = styled.div`
-  max-width: 680px;
   width: 100%;
+  max-width: 640px;
   margin: 0 auto;
   justify-content: center;
   align-items: center;
@@ -79,16 +79,23 @@ const Wrapper = styled.div`
 `
 
 const Boards = styled.div`
-  width: 100%;
+width: 100%;
+justify-content: center;
+  align-items: center;
   display: flex;
-  flex-wrap: nowrap;
+  /* width: 100%;
+  display: flex;
+  flex-wrap: nowrap; */
   /* display: grid;
   width: 100%;
   gap: 10px;
   grid-template-columns: repeat(3,1fr); */
 `
 const SubBoard = styled.div`
-  width: 10%;
+   display: grid;
+  width: 100%;
+  gap: 10px;
+  /* grid-template-columns: repeat(3,1fr); */
   /* display: grid;
   grid-template-columns: repeat(3,1fr); */
 `
@@ -190,26 +197,29 @@ function App() {
          <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
           <Wrapper>
 
-            <Droppable droppableId="droppable" type="PERSON">
+            <Droppable droppableId="droppable" type="PERSON" direction="horizontal">
               {(provided, snapshot) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
+                <Boards ref={provided.innerRef} {...provided.droppableProps}>
                   {/* <Draggable draggableId='draggable-1' index={0}>
                       
                   </Draggable> */}
                   {
                     toDos.map((board,index)=>(
-                      <Draggable draggableId={`draggale-${index}`} index={index} key={index}>
-                        {
-                          (provided,snapshot) => (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                              <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
-                            </div>
-                          )
-                        }
-                      </Draggable>
+                      <SubBoard>
+                        <Draggable draggableId={`draggale-${index}`} index={index} key={index}>
+                          {
+                            (provided,snapshot) => (
+                              <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
+                              </div>
+                            )
+                          }
+                        </Draggable>
+                      </SubBoard>
+                      
                     ))
                   }
-                </div>
+                </Boards>
               )}
             </Droppable>
           </Wrapper>
