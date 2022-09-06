@@ -96,9 +96,8 @@ function App() {
   const [isTrash,setIsTrash] = useState(false);
   //드래그가 끝났을때
   const onDragEnd = (info : DropResult) => {
-    console.log(info);
     const {destination,draggableId,source} = info;
-
+    if(!destination) return;
     if(destination?.droppableId === "droppable"){
       setToDos((oldToDos)=>{
         const todoCopy = [...oldToDos];
@@ -109,22 +108,68 @@ function App() {
         return todoCopy
       })
     }
+    if(destination?.droppableId == "trash"){
+      setToDos((oldToDos)=>{
+        const boardCopy = [...oldToDos];
+        const boardIndex = boardCopy.findIndex((item) => item.boardId === source.droppableId);
+        const todoCopy = [...boardCopy[boardIndex].value];
+        todoCopy.splice(source.index,1);
+        const newObject = {
+          boardId : source.droppableId,
+          value : todoCopy
+        }
+        boardCopy.splice(boardIndex,1);
+        boardCopy.splice(boardIndex,0,newObject);
 
-    if(destination?.droppableId === source.droppableId){
+        return boardCopy;
+      })
+    }else if(destination?.droppableId === source.droppableId){
       setToDos((oldToDos)=>{
         const boardCopy = [...oldToDos]
-        console.log(boardCopy);
-        // const todoCopy = [...boardCopy[0].value];
-        // console.log(todoCopy);
-        // const taskObj = todoCopy[source.index];
-        // todoCopy.splice(source.index,1);
-        // todoCopy.splice(destination.index,0,taskObj);
-        // console.log(todoCopy);
+        const boardIndex = boardCopy.findIndex((item) => item.boardId === source.droppableId);
 
-        
+        const todoCopy = [...boardCopy[boardIndex].value];
+        const taskObj = todoCopy[source.index];
+        todoCopy.splice(source.index,1);
+        todoCopy.splice(destination.index,0,taskObj);
+        const newObject = {
+          boardId : source.droppableId,
+          value : todoCopy
+        }
+        boardCopy.splice(boardIndex,1);
+        boardCopy.splice(boardIndex,0,newObject);
 
-        return oldToDos;
+        return boardCopy;
       })
+    }else if(destination?.droppableId !== source.droppableId){
+      setToDos((oldToDos)=>{
+        const boardCopy = [...oldToDos];
+        const sourceIndex = boardCopy.findIndex((item) => item.boardId === source.droppableId);
+        const targetIndex = boardCopy.findIndex((item) => item.boardId === destination?.droppableId);
+        const sourceBoard = [...boardCopy[sourceIndex].value];
+        const targetBoard = [...boardCopy[targetIndex].value];
+        const taskObj = sourceBoard[source.index];
+        console.log("source",sourceBoard);
+        console.log("target",targetBoard);
+        sourceBoard.splice(source.index,1);
+        targetBoard.splice(destination.index,0,taskObj)
+
+        const sourceObject = {
+          boardId : source.droppableId,
+          value : sourceBoard
+        }
+        const targetObject = {
+          boardId:destination.droppableId,
+          value : targetBoard
+        }
+        boardCopy.splice(sourceIndex,1);
+        boardCopy.splice(sourceIndex,0,sourceObject);
+        boardCopy.splice(targetIndex,1);
+        boardCopy.splice(targetIndex,0,targetObject)
+        return boardCopy
+      })
+      // console.log("info");
+      // console.log(info);
     }
     // if(!destination) return;
 
@@ -208,39 +253,8 @@ function App() {
                     ))
                   }
                 </div>
-
-  //               <div
-  //                 ref={provided.innerRef}
-  //                 style={{ backgroundColor: snapshot.isDraggingOver ? 'blue' : 'grey' }}
-  //                 {...provided.droppableProps}
-  //               >
-  //                 <Draggable draggableId="draggable-1" index={0}>
-  // {(provided, snapshot) => (
-  //   <div
-  //     ref={provided.innerRef}
-  //     {...provided.draggableProps}
-  //     {...provided.dragHandleProps}
-  //   >
-  //     <h4>My draggable</h4>
-  //   </div>
-  // )}
-  //                 </Draggable>;
-  //               </div>
               )}
             </Droppable>
-
-
-              {/* {
-                toDos.map((board)=>(
-                  // board.boardId
-                  <Board boardId={board.boardId} key={board.boardId} toDos={board.value}/>
-                ))
-              } */}
-              
-              {/* {Object.keys(toDos).map(boardId => (
-              
-              <Board boardId={boardId} key={boardId} toDos={toDos[boardId]}/>
-              ))} */}
             </Boards>
           </Wrapper>
           <Trash/>
